@@ -157,14 +157,19 @@ require('lazy').setup({
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'stchaker/nord.nvim', -- Add nord colorscheme as a theme to be used in neovim
   {
-    'nvim-tree/nvim-tree.lua', --Add a file explorer to the neovim userset
-    keys = {
-      { 'n', '<leader>e', 'NvimTreeToggle<CR>', { silent = true } },
-    },
-  },
-  {
     'christoomey/vim-tmux-navigator',
     lazy = false,
+  },
+  {
+    'nvim-tree/nvim-tree.lua',
+    lazy = false,
+    version = '*',
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require('nvim-tree').setup {}
+    end
   },
 
   -- NOTE: Plugins can also be added by using a table,
@@ -545,6 +550,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'clang-format', --Used to format C++ code with the clang standard
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -591,6 +597,7 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        c = { 'clang-format' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --

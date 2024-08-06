@@ -174,6 +174,44 @@ require('lazy').setup({
     end,
   },
   'mfussenegger/nvim-dap', -- Adds the debug adapter protocol system to neovim
+  {
+    'jay-babu/mason-nvim-dap.nvim', --Adds the interface between neovim and debuggers
+    event = 'VeryLazy',
+    dependencies = {
+      'williamboman/mason.nvim',
+      'mfussenegger/nvim-dap',
+    },
+    opts = {
+      handlers = {},
+      ensure_installed = { -- place debuggers in this table
+        'codelldb',
+      },
+    },
+  },
+  { --Add dap ui to neovim
+    'rcarriga/nvim-dap-ui',
+    event = 'VeryLazy',
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'nvim-neotest/nvim-nio',
+    },
+    config = function()
+      local dap = require 'dap'
+      local dapui = require 'dapui'
+      dapui.setup()
+      dap.listeners.after.event_initialized['dapui_config'] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated['dapui_config'] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited['dapui_config'] = function()
+        dapui.close()
+      end
+      vim.keymap.set('n', '<leader>db', ':DapToggleBreakpoint <CR>', { desc = 'Add breakpoint at current line' })
+      vim.keymap.set('n', '<leader>dr', ':DapContinue <CR>', { desc = 'Start or continue the debugger' })
+    end,
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -224,7 +262,7 @@ require('lazy').setup({
       -- Document existing key chains
       require('which-key').add {
         { '<leader>c', group = '[C]ode' },
-        { '<leader>d', group = '[D]ocument' },
+        { '<leader>d', group = '[D]ebug' },
         { '<leader>e', group = '[E]xplore' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -364,7 +402,12 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
-      { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
+      {
+        'williamboman/mason.nvim',
+        config = true,
+      },
+      -- NOTE: Must be loaded before dependants
+      --
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 

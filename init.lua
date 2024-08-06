@@ -1,5 +1,3 @@
--- Lua init file based off of the kickstart guide on using neovim!
-
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
@@ -161,16 +159,21 @@ require('lazy').setup({
     lazy = false,
   },
   {
-    'nvim-tree/nvim-tree.lua',
+    'nvim-tree/nvim-tree.lua', --Add tree style file explorer to neovim
     lazy = false,
     version = '*',
     dependencies = {
       'nvim-tree/nvim-web-devicons',
     },
     config = function()
+      vim.keymap.set('n', '<leader>et', ':NvimTreeToggle<CR>', { desc = 'Toggle the nvim-tree' })
+      vim.keymap.set('n', '<leader>ef', ':NvimTreeFocus<CR>', { desc = 'Open the tree if closed and focus on it' })
+      vim.keymap.set('n', '<leader>es', ':NvimTreeFindFile<CR>', { desc = 'Move the cursor in the tree for the current buffer' })
+      vim.keymap.set('n', '<leader>ec', ':NvimTreeCollapse<CR>', { desc = 'Collapse the nvim-tree recursively' })
       require('nvim-tree').setup {}
     end,
   },
+  'mfussenegger/nvim-dap', -- Adds the debug adapter protocol system to neovim
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -222,6 +225,7 @@ require('lazy').setup({
       require('which-key').add {
         { '<leader>c', group = '[C]ode' },
         { '<leader>d', group = '[D]ocument' },
+        { '<leader>e', group = '[E]xplore' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>w', group = '[W]orkspace' },

@@ -173,7 +173,12 @@ require('lazy').setup({
       require('nvim-tree').setup {}
     end,
   },
-  'mfussenegger/nvim-dap', -- Adds the debug adapter protocol system to neovim
+  {
+    'mfussenegger/nvim-dap', -- Adds the debug adapter protocol system to neovim
+    vim.keymap.set('n', '<leader>db', ':DapToggleBreakpoint <CR>', { desc = 'Toggle a breakpoint at the cursors current line' }),
+    vim.keymap.set('n', '<leader>dr', ':DapContinue <CR>', { desc = 'Start or continue the debugger' }),
+    vim.keymap.set('n', '<leader>ds', ':DapStepOver <CR>', { desc = 'Step over the current brekpoint' }),
+  },
   {
     'jay-babu/mason-nvim-dap.nvim', --Adds the interface between neovim and debuggers
     event = 'VeryLazy',
@@ -208,8 +213,6 @@ require('lazy').setup({
       dap.listeners.before.event_exited['dapui_config'] = function()
         dapui.close()
       end
-      vim.keymap.set('n', '<leader>db', ':DapToggleBreakpoint <CR>', { desc = 'Add breakpoint at current line' })
-      vim.keymap.set('n', '<leader>dr', ':DapContinue <CR>', { desc = 'Start or continue the debugger' })
     end,
   },
   { --Add functionality to debug with go
@@ -217,28 +220,8 @@ require('lazy').setup({
     'leoluz/nvim-dap-go',
     ft = 'go',
     dependencies = 'mfussenegger/nvim-dap',
-    n = {
-      ['<leader>dus'] = {
-        function()
-          local widgets = require 'dap.ui.widgets'
-          local sidebar = widgets.sidebar(widgets.scopes)
-          sidebar.open()
-        end,
-        'Open debugging ui sidebar',
-      },
-      ['<leader>dgt'] = {
-        function()
-          require('dap-go').debug_test()
-        end,
-        'Debug go test',
-      },
-      ['<leader>dgl'] = {
-        function()
-          require('dap-go').debug_last_test()
-        end,
-        'Debug last go test',
-      },
-    },
+    vim.keymap.set('n', '<leader>dgt', ":lua require('dap-go').debug_test()<CR>", { desc = 'Debug the closest method above the cursor with go' }),
+    vim.keymap.set('n', '<leader>dgl', ":lua require('dap-go').debug_last_test()<CR>", { desc = 'Run the last debug test for use with go' }),
     config = function(_, opts)
       require('dap-go').setup(opts)
     end,
@@ -250,6 +233,9 @@ require('lazy').setup({
       'mfussenegger/nvim-dap',
       'rcarriga/nvim-dap-ui',
     },
+    vim.keymap.set('n', '<leader>dpn', ":lua require('dap-python').test_method() <CR>", { desc = 'Debug the closest method above the cursor in Python' }),
+    vim.keymap.set('n', '<leader>dpc', ":lua require('dap-python').test_class() <CR>", { desc = 'Debug the closest class above the cursor in Python' }),
+    vim.keymap.set('n', '<leader>dps', ":lua require('dap-python').debug_selection() <CR>", { desc = 'Debugs a selection of code in Python' }),
     config = function(_, opts)
       local path = '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python'
       require('dap-python').setup(path)

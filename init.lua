@@ -634,6 +634,7 @@ require('lazy').setup({
         'clang-format', --Used to format C++ code with the clang standard
         'gofumpt', --Used to format go code
         'black', --Used to format python code
+        'cmakelang', --Used to format cmake code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -684,6 +685,7 @@ require('lazy').setup({
         cpp = { 'clang-format' },
         go = { 'gofumpt' },
         python = { 'black' },
+        cmake = { 'cmakelang' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --

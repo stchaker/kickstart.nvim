@@ -212,6 +212,49 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>dr', ':DapContinue <CR>', { desc = 'Start or continue the debugger' })
     end,
   },
+  { --Add functionality to debug with go
+    --TODO: Add the custom mappings here to whichkey by creating a mappings.lua file and importing it - not important unless you need the debugging UI immediatley.
+    'leoluz/nvim-dap-go',
+    ft = 'go',
+    dependencies = 'mfussenegger/nvim-dap',
+    n = {
+      ['<leader>dus'] = {
+        function()
+          local widgets = require 'dap.ui.widgets'
+          local sidebar = widgets.sidebar(widgets.scopes)
+          sidebar.open()
+        end,
+        'Open debugging ui sidebar',
+      },
+      ['<leader>dgt'] = {
+        function()
+          require('dap-go').debug_test()
+        end,
+        'Debug go test',
+      },
+      ['<leader>dgl'] = {
+        function()
+          require('dap-go').debug_last_test()
+        end,
+        'Debug last go test',
+      },
+    },
+    config = function(_, opts)
+      require('dap-go').setup(opts)
+    end,
+  },
+  {
+    'mfussenegger/nvim-dap-python',
+    ft = 'python',
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'rcarriga/nvim-dap-ui',
+    },
+    config = function(_, opts)
+      local path = '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python'
+      require('dap-python').setup(path)
+    end,
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -405,6 +448,11 @@ require('lazy').setup({
       {
         'williamboman/mason.nvim',
         config = true,
+        opts = {
+          ensure_installed = {
+            'debugpy',
+          },
+        },
       },
       -- NOTE: Must be loaded before dependants
       --
@@ -598,6 +646,8 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
         'clang-format', --Used to format C++ code with the clang standard
+        'gofumpt', --Used to format go code
+        'black', --Used to format python code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -646,6 +696,8 @@ require('lazy').setup({
         lua = { 'stylua' },
         c = { 'clang-format' },
         cpp = { 'clang-format' },
+        go = { 'gofumpt' },
+        python = { 'black' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --

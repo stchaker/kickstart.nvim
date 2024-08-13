@@ -78,6 +78,12 @@ vim.g.loaded_netrwPlugin = 1
 -- Enable 24 bit color to the terminal
 vim.opt.termguicolors = true
 
+-- Set tabs and shiftwidth to 2 spaces
+vim.opt.tabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.expandtab = true
+vim.bo.softtabstop = 2
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 

@@ -599,7 +599,7 @@ require('lazy').setup({
         gopls = {},
         pylsp = {},
         fortls = {},
-        -- rust_analyzer = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -643,6 +643,7 @@ require('lazy').setup({
         'black', --Used to format python code
         'cmakelang', --Used to format cmake code
         'fprettify', --Used to format Fortran code
+        'rustfmt', --Used to format rust code
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

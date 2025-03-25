@@ -165,6 +165,12 @@ require('lazy').setup({
     lazy = false,
   },
   {
+    'github/copilot.vim',
+    event = 'InsertEnter',
+    autoStart = true,
+    lazy = false,
+  },
+  {
     'nvim-tree/nvim-tree.lua', --Add tree style file explorer to neovim
     lazy = false,
     version = '*',
